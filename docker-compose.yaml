@@ -1,0 +1,41 @@
+version: '3.8'
+
+networks:
+  ros_sitl_net:
+    driver: bridge
+
+services:
+  ardupilot-sitl:
+    image: ardupilot
+    container_name: sitl_1
+    platform: linux/amd64
+    tty: true
+    ports:
+      - 5760:5760
+    networks:
+      - ros_sitl_net
+
+  mavproxy:
+    image: ardupilot
+    container_name: MAVProxy
+    entrypoint: ["python3",  "/home/dockeruser/.local/lib/python3.10/site-packages/MAVProxy/mavproxy.py", "--master=tcp:sitl_1:5760"]
+    stdin_open: true
+    tty: true
+    ports:
+      - 8080:8080
+    networks:
+      - ros_sitl_net
+
+  # for process monitoring
+  #create a volume to store the packages
+  # definir o deploy:
+  # packages a serem compilados
+  # scripts a serem considerados
+  # receber parametros do user e coloca-los em uma variavel
+  # o entrypoint deve usar as variaveis de parametros para definir os scripts e os pacotes a serem compilados, e por ultimo, o(s) programa(s) que deve rodar (ou mavros para monitoramento)
+
+  ros-control:
+    image: ardupilot_ros
+    container_name: ros_control
+    networks:
+      - ros_sitl_net

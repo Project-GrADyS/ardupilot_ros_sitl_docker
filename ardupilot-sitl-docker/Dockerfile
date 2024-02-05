@@ -34,6 +34,7 @@ RUN export PATH=/usr/lib/ccache:$PATH
 RUN python -m pip install empy
 RUN python -m pip install pexpect
 RUN pip install future
+RUN pip install MAVProxy
 RUN python -m pip install pymavlink
 
 
