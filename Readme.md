@@ -25,11 +25,11 @@ docker run -it --rm ardupilot_ros
 
 #### EXPERIMENTAL:
 ```sh
-docker run -it --rm --mount --network b60dda053405 type=bind,source="$(pwd)"/PKG,target=/ros2_ws/src --mount type=bind,source="$(pwd)",target=/ros2_config_app,readonly ardupilot_ros
+docker run -it --rm --network ros_sitl --mount type=bind,source="$(pwd)"/PKG,target=/ros2_ws/src --mount type=bind,source="$(pwd)",target=/ros2_config_app,readonly ardupilot_ros
 
 172.28.0.2:5760
 
-ros2 launch mavros apm.launch fcu_url:=tcp://172.28.0.2:5760
+ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
 ```
 
 ## SITL AND MAVPROXY INSTANCE
@@ -41,7 +41,7 @@ docker build --tag ardupilot .
 ### RUN SITL:
 ```sh
 docker run -it --rm -p 5760:5760 ardupilot
-docker run -it --name sitl_1 --network ros_sitl -p 5760:5760 ardupilot
+docker run -it --rm --name sitl_1 --network ros_sitl -p 5760:5760 ardupilot
 ```
 ### RUN MAVPROXY:
 ```sh

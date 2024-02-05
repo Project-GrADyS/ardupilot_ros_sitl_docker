@@ -26,7 +26,7 @@ cd /ros2_ws/src
 #git clone https://github.com/ros/ros_tutorials.git -b humble
 #git clone https://github.com/ros-geographic-info/geographic_info.git
 cd ..
-rosdep update && rosdep install -i --from-path src --rosdistro humble -y #deve ser colocado 
+#rosdep update && rosdep install -i --from-path src --rosdistro humble -y #deve ser colocado 
 #mavros devera ser empacotado/compilado no dockerfile
 
 # aqui devera ter um laco "for" com o nome dos pacotes a serem compilados
