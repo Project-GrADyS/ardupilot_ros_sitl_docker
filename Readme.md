@@ -1,7 +1,7 @@
 # based on Repositories: 
 - SITL
     - https://github.com/radarku/ardupilot-sitl-docker
-- ROS HUMBLE:
+- ROS HUMBLE (with MAVROS2):
     - https://github.com/ArduPilot/ardupilot_dev_docker/tree/master
 - Ardupilot Copter-4.3: 
     - https://github.com/ArduPilot/ardupilot/tree/Copter-4.3

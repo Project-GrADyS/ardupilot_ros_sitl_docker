@@ -18,7 +18,8 @@ services:
   mavproxy:
     image: ardupilot
     container_name: MAVProxy
-    entrypoint: ["python3",  "/home/dockeruser/.local/lib/python3.10/site-packages/MAVProxy/mavproxy.py", "--master=tcp:sitl_1:5760"]
+    #para testes
+    #entrypoint: ["python3",  "/home/dockeruser/.local/lib/python3.10/site-packages/MAVProxy/mavproxy.py", "--master=tcp:sitl_1:5760", "--out udp:sitl_1:14550"]
     stdin_open: true
     tty: true
     ports:
@@ -37,5 +38,15 @@ services:
   ros-control:
     image: ardupilot_ros
     container_name: ros_control
+    entrypoint: ["/bin/bash", "-c", "/ros2_config_app/init.sh"]
+    volumes:
+      - type: bind
+        source: ./ardupilot_ros_docker/PKG
+        target: /ros2_ws/src
+        
+      - type: bind
+        source: ./ardupilot_ros_docker
+        target: /ros2_config_app
+        read_only: true
     networks:
       - ros_sitl_net

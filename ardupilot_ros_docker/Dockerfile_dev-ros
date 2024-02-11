@@ -129,7 +129,8 @@ RUN mkdir -p /ros2_ws/src
 WORKDIR /ros2_ws
 RUN cd /ros2_ws
 RUN rosdep update && rosdep install -i --from-path src --rosdistro humble -y
-RUN ["/bin/bash", "-c", "source /opt/ros/humble/setup.bash", "&& ros2 run mavros install_geographiclib_datasets.sh"]
+RUN ["/bin/bash", "-c", "/opt/ros/humble/lib/mavros/install_geographiclib_datasets.sh"]
+# ver se o comando acima esta funcionando
 
 RUN mkdir -p /ros2_config_app
 WORKDIR /ros2_config_app

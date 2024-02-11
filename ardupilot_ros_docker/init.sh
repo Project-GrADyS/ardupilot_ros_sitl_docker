@@ -26,15 +26,14 @@ cd /ros2_ws/src
 #git clone https://github.com/ros/ros_tutorials.git -b humble
 #git clone https://github.com/ros-geographic-info/geographic_info.git
 cd ..
-#rosdep update && rosdep install -i --from-path src --rosdistro humble -y #deve ser colocado 
-#mavros devera ser empacotado/compilado no dockerfile
+#rosdep update && rosdep install -i --from-path src --rosdistro humble -y #deve ser colocado
 
 # aqui devera ter um laco "for" com o nome dos pacotes a serem compilados
-if [ $COMPILE_STATE -eq 1 ]; then
-    for package_name in $PACKAGES; do
-        colcon build --packages-up-to $package_name --symlink-install
-    done
-fi
+#if [ $COMPILE_STATE -eq 1 ]; then
+#    for package_name in $PACKAGES; do
+#        colcon build --packages-up-to $package_name --symlink-install
+#    done
+#fi
 # --packages-up-to builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
 # --symlink-install saves you from having to rebuild every time you tweak python scripts
 
@@ -46,4 +45,4 @@ fi
 #    ros2 run $node
 #done
 
-#/bin/bash
+ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
