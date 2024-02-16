@@ -1,0 +1,21 @@
+running develop
+running egg_info
+creating drone_basics.egg-info
+writing drone_basics.egg-info/PKG-INFO
+writing dependency_links to drone_basics.egg-info/dependency_links.txt
+writing entry points to drone_basics.egg-info/entry_points.txt
+writing requirements to drone_basics.egg-info/requires.txt
+writing top-level names to drone_basics.egg-info/top_level.txt
+writing manifest file 'drone_basics.egg-info/SOURCES.txt'
+reading manifest file 'drone_basics.egg-info/SOURCES.txt'
+writing manifest file 'drone_basics.egg-info/SOURCES.txt'
+running build_ext
+Creating /ros2_ws/install/drone_basics/lib/python3.10/site-packages/drone-basics.egg-link (link to .)
+
+Installed /ros2_ws/build/drone_basics
+running install_data
+creating /ros2_ws/install/drone_basics/share/ament_index
+creating /ros2_ws/install/drone_basics/share/ament_index/resource_index
+creating /ros2_ws/install/drone_basics/share/ament_index/resource_index/packages
+copying resource/drone_basics -> /ros2_ws/install/drone_basics/share/ament_index/resource_index/packages
+copying package.xml -> /ros2_ws/install/drone_basics/share/drone_basics

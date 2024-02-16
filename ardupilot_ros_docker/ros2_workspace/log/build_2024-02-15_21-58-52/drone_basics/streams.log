@@ -1,0 +1,23 @@
+[3.424s] Invoking command in '/ros2_ws/build/drone_basics': PYTHONPATH=/ros2_ws/build/drone_basics/prefix_override:/ros2_ws/install/drone_basics/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /ros2_ws/build/drone_basics/build --no-deps install_data
+[3.919s] running develop
+[4.149s] running egg_info
+[4.149s] creating drone_basics.egg-info
+[4.149s] writing drone_basics.egg-info/PKG-INFO
+[4.150s] writing dependency_links to drone_basics.egg-info/dependency_links.txt
+[4.150s] writing entry points to drone_basics.egg-info/entry_points.txt
+[4.151s] writing requirements to drone_basics.egg-info/requires.txt
+[4.151s] writing top-level names to drone_basics.egg-info/top_level.txt
+[4.151s] writing manifest file 'drone_basics.egg-info/SOURCES.txt'
+[4.154s] reading manifest file 'drone_basics.egg-info/SOURCES.txt'
+[4.155s] writing manifest file 'drone_basics.egg-info/SOURCES.txt'
+[4.170s] running build_ext
+[4.170s] Creating /ros2_ws/install/drone_basics/lib/python3.10/site-packages/drone-basics.egg-link (link to .)
+[4.173s] 
+[4.173s] Installed /ros2_ws/build/drone_basics
+[4.173s] running install_data
+[4.173s] creating /ros2_ws/install/drone_basics/share/ament_index
+[4.174s] creating /ros2_ws/install/drone_basics/share/ament_index/resource_index
+[4.174s] creating /ros2_ws/install/drone_basics/share/ament_index/resource_index/packages
+[4.174s] copying resource/drone_basics -> /ros2_ws/install/drone_basics/share/ament_index/resource_index/packages
+[4.175s] copying package.xml -> /ros2_ws/install/drone_basics/share/drone_basics
+[4.233s] Invoked command in '/ros2_ws/build/drone_basics' returned '0': PYTHONPATH=/ros2_ws/build/drone_basics/prefix_override:/ros2_ws/install/drone_basics/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py develop --editable --build-directory /ros2_ws/build/drone_basics/build --no-deps install_data

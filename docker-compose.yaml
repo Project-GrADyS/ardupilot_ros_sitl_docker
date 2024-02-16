@@ -44,7 +44,7 @@ services:
         target: /ros2_ws
         
       - type: bind
-        source: ./ardupilot_ros_docker
+        source: ./ardupilot_ros_docker/configs
         target: /ros2_config_app
         read_only: true
     networks:
