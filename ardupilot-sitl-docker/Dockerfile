@@ -1,6 +1,6 @@
 FROM ubuntu:22.04
 
-ARG COPTER_TAG=Copter-4.3
+ARG VEHICLE_TAG=Copter-4.3
 
 # install git 
 RUN apt-get update && apt-get install -y git; git config --global url."https://github.com/".insteadOf git://github.com/
@@ -10,7 +10,7 @@ RUN git clone https://github.com/ArduPilot/ardupilot.git ardupilot
 WORKDIR ardupilot
 
 # Checkout the latest Copter...
-RUN git checkout ${COPTER_TAG}
+# RUN git checkout ${VEHICLE_TAG}
 
 # Now start build instructions from http://ardupilot.org/dev/docs/setting-up-sitl-on-linux.html
 RUN git submodule update --init --recursive
@@ -36,6 +36,7 @@ RUN python -m pip install pexpect
 RUN pip install future
 RUN pip install MAVProxy
 RUN python -m pip install pymavlink
+RUN pip3 install empy==3.3.4 --user
 
 
 # Continue build instructions from https://github.com/ArduPilot/ardupilot/blob/master/BUILD.md

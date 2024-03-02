@@ -1,13 +1,6 @@
 #!/bin/bash
 
-# echo colors
-RED="\e[0;31m"
-GREEN_BOLD="\e[1;32m"
-BLUE_BOLD="\e[1;34m"
-NC="\e[0;0m"
-
-# Arquivo de configuração
-CONFIG_FILE="/ros2_config_app/config.ini"
+source constants.sh
 
 # Função para ler valores do arquivo INI
 read_ini() {
@@ -20,11 +13,12 @@ read_ini() {
 # Lendo e usando os valores do arquivo INI
 PACKAGES_TO_CREATE=$(read_ini "Configs" "PACKAGES_TO_CREATE")
 PACKAGES_TO_BUILD=$(read_ini "Configs" "PACKAGES_TO_BUILD")
-NODES=$(read_ini "Configs" "NODES_FOR_RUN")
+NODES_FOR_RUN=$(read_ini "Configs" "NODES_FOR_RUN")
 COMPILE_STATE=$(read_ini "Configs" "COMPILE_STATE")
 CREATE_PACKAGE_STATE=$(read_ini "Configs" "CREATE_PACKAGE_STATE")
+COM_ARCH=$(read_ini "Configs" "COM_ARCH")
 
-source /opt/ros/humble/setup.bash
+source /opt/ros/$ROS_DISTRO/setup.bash
 mkdir -p /ros2_ws/src
 cd /ros2_ws/src
 
@@ -43,6 +37,12 @@ if [ $CREATE_PACKAGE_STATE -eq 1 ]; then
 fi
 cd ..
 
+function build_package() {
+    echo -e "${RED}BUILDING ${GREEN_BOLD}$1"
+    colcon build --packages-up-to $1 --symlink-install
+    source install/local_setup.bash
+}
+
 # aqui devera ter um laco "for" com o nome dos pacotes a serem compilados
 if [ $COMPILE_STATE -eq 1 ]; then
     echo -e "${RED} \
@@ -51,20 +51,51 @@ if [ $COMPILE_STATE -eq 1 ]; then
     **********************************"
     rosdep update && rosdep install -i --from-path src --rosdistro humble -y
     for package_name in $PACKAGES_TO_BUILD; do
-        echo -e "${RED}BUILDING ${GREEN_BOLD}$package_name"
-        colcon build --packages-up-to $package_name --symlink-install
+        build_package $package_name
     done
 fi
 # --packages-up-to builds the package you want, plus all its dependencies, but not the whole workspace (saves time)
 # --symlink-install saves you from having to rebuild every time you tweak python scripts
 
-source /opt/ros/humble/setup.bash
+source /opt/ros/$ROS_DISTRO/setup.bash
+
+if [ $COM_ARCH -eq 1 ]; then
+    echo -e "${GREEN_BOLD}INITIALIZING-MODE:\
+    ${RED}EProsima Micro XRCE DDS Client"
+    if ! [ -d "./src/micro_ros_setup" ]; then
+
+        git clone -b $ROS_DISTRO \
+        https://github.com/micro-ROS/micro_ros_setup.git \
+        src/micro_ros_setup
+
+        apt update && rosdep update
+        rosdep install --from-paths src --ignore-src -y
+        build_package micro_ros_setup
+        source install/local_setup.bash
+
+        ros2 run micro_ros_setup create_agent_ws.sh
+        ros2 run micro_ros_setup build_agent.sh
+    fi
+
+source /ros2_ws/install/local_setup.bash
+cd /
+#in development
+git clone --depth=1 https://github.com/ArduPilot/ardupilot.git
+cd /ardupilot
+git sparse-checkout set --no-cone libraries/AP_DDS/
+cd /ardupilot/libraries/AP_DDS/
+#export PATH=$PATH:/dds-gen/scripts
+ros2 run micro_ros_agent micro_ros_agent udp4 -p 5760 -r dds_xrce_profile.xml
+fi
 
 #aqui devera rodar o mavros(unstable)
-echo -e "${RED}RUNNING ${GREEN_BOLD}MAVROS"
-ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
+if [ $COM_ARCH -eq 2 ]; then
+    echo -e "${GREEN_BOLD}INITIALIZING MODE:\
+    ${RED}MAVROS"
+    ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
+fi
 
 #aqui devera ter um laco "for" que ativara os conjuntos de nodes que irao rodar em ordem
-#for node in $NODES; do
+#for node in $NODES_FOR_RUN; do
 #    ros2 run $node
 #done

@@ -5,6 +5,12 @@
     - https://github.com/ArduPilot/ardupilot_dev_docker/tree/master
 - Ardupilot Copter-4.3: 
     - https://github.com/ArduPilot/ardupilot/tree/Copter-4.3
+- AP_DDS:
+    - https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_DDS#installing-build-dependencies
+
+# Introduction
+- rate limit XRCE DDS(200Hz+) is faster than MAVLink(50Hz)
+- https://cdck-file-uploads-global.s3.dualstack.us-west-2.amazonaws.com/business7/uploads/ros/original/3X/f/1/f10479eaf0434928929bf0637f52a468102f6a51.pdf
 
 # RUNNING COMPOSE
 ```sh
