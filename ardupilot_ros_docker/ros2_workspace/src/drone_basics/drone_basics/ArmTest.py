@@ -10,40 +10,29 @@ __all__ = (
     'trigger_control',
 )
 
-
 import sys
 import rclpy
 from rclpy.node import Node
-from mavros_msgs.srv import WaypointPush
-from mavros_msgs.msg import Waypoint
-from mavros_msgs.msg import WaypointList
 from mavros_msgs.srv import SetMode, CommandLong, CommandInt, CommandBool, CommandHome, CommandTOL, CommandTriggerControl, CommandTriggerInterval
-
-from sensor_msgs.msg import Image
 
 class ArmTest(Node):
     def __init__(self):
         super().__init__('arm_node')
-        srv_cmd_int = self.create_client(SetMode, "mavros/set_mode")
-        srv_cmd_int.wait_for_service()
+        self.srv_set_mode = self.create_client(SetMode, "mavros/set_mode")
+        while not self.srv_set_mode.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('WARN: set_mode service not available!')
+        self.srv_arm = self.create_client(CommandBool, "/mavros/cmd/arming")
+        while not self.srv_arm.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('WARN: arm service not available!')
 
         # create reposition request
-        command = SetMode.Request()
-        #command.frame = 3 # global, relative altitude
-        #command.command = 216 # https://mavlink.io/en/messages/common.html#MAV_CMD_DO_REPOSITION
-        #command.current = 2 # indicate move to message in guided mode
-        #command.x = int(46.6127 * 1e7)
-        #command.y = int(14.2652 * 1e7)
-        #command.z = 50.0 # altitude above ground
-        command.base_mode = 216
-        command.custom_mode = "GUIDED"
-        print(command)
+        msg_flight_mode = SetMode.Request(base_mode=0, custom_mode='GUIDED')
+        status = self.srv_set_mode.call_async(msg_flight_mode)
+        print(status)
 
-        future_command = srv_cmd_int.call_async(command)
-        #if future_command.result().success:
-        #    self.get_logger().info("Successfully send move to command to vehicle.")
-        #else:
-        #    self.get_logger().warn("Failed to send move to command to vehicle!")    
+        msg_arming = CommandBool.Request(value=True)
+        status = self.srv_arm.call_async(msg_arming)
+        print(status)
 
 def main(args=None):
     rclpy.init(args=args)
