@@ -9,6 +9,7 @@ services:
     image: ardupilot
     container_name: sitl_1
     platform: linux/amd64
+    privileged: true
     entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 --custom-location=39.9656,-75.1810,276,180 -w --frame + --no-rebuild --enable-dds --no-mavproxy --speedup 2
     tty: true
     ports:
@@ -17,6 +18,7 @@ services:
       - ros_sitl_net
     env_file:
       - sitl-protocol.env
+
 
   #mavproxy:
     #image: ardupilot
@@ -41,6 +43,7 @@ services:
     image: ardupilot_ros
     container_name: ros_control
     entrypoint: ["/bin/bash", "-c", "/ros2_config_app/init.sh"]
+    privileged: true
     volumes:
       - type: bind
         source: ./ardupilot_ros_docker/ros2_workspace
