@@ -130,7 +130,10 @@ WORKDIR /ros2_ws
 RUN cd /ros2_ws
 RUN rosdep update && rosdep install -i --from-path src --rosdistro humble -y
 RUN ["/bin/bash", "-c", "/opt/ros/humble/lib/mavros/install_geographiclib_datasets.sh"]
-# ver se o comando acima esta funcionando
+
+ENV MAVROS_CONFIG="/opt/ros/humble/share/mavros/launch/apm_config.yaml"
+RUN sed -i 's/timesync_rate: 10.0/timesync_rate: 0.0/g' "$MAVROS_CONFIG"
+# disable timesync_rate
 
 RUN mkdir -p /ros2_config_app
 WORKDIR /ros2_config_app
