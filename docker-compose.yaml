@@ -7,6 +7,9 @@ networks:
 services:
   ardupilot-sitl:
     image: ardupilot
+    build:
+      context: .
+      dockerfile: ./ardupilot-sitl-docker/Dockerfile
     container_name: sitl_1
     platform: linux/amd64
     privileged: true
@@ -41,6 +44,9 @@ services:
 
   ros-control:
     image: ardupilot_ros
+    build:
+      context: .
+      dockerfile: ./ardupilot_ros_docker/Dockerfile_dev-ros
     container_name: ros_control
     entrypoint: ["/bin/bash", "-c", "/ros2_config_app/init.sh"]
     privileged: true
