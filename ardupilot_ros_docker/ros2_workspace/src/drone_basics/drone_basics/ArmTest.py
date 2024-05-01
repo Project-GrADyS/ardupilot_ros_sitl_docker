@@ -23,7 +23,6 @@ from rclpy.node import Node
 class ArmTest(Node, ArdupilotVehicle):
     def __init__(self):
         super().__init__('arm_node')
-        self.get_logger().info('INFO: Setting up MAVROS stream rate')
         self.setMavrosStreamRate()
         self.setMode("GUIDED")# custom modes: http://wiki.ros.org/mavros/CustomModes
         self.setArm(True)

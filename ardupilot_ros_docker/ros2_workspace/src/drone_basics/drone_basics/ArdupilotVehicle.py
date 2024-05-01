@@ -13,6 +13,7 @@ class ArdupilotVehicle():
         self.sysid = SYSID
 
     def setMavrosStreamRate(self, id: int=0, rate: int=10, isOn: bool=True):
+        self.get_logger().info('INFO: Setting up MAVROS stream rate')
         self.srv_stream_rate = self.create_client(StreamRate, "/mavros/set_stream_rate")
         while not self.srv_stream_rate.wait_for_service(timeout_sec=1.0):
             self.get_logger().warning('WARN: waiting for the stream_rate service to become available!')
@@ -42,14 +43,13 @@ class ArdupilotVehicle():
     def goToPosition():
         pass
 
-    def setTakeoff(self, min_pitch: float, yaw: float, latitude: float, longitude: float, altitude: float):
+    def setTakeoff(self, altitude: float, min_pitch: float=0.0, yaw: float=0.0, latitude: float=0.0, longitude: float=0.0):
         self.srv_takeoff = self.create_client(CommandTOL, "/mavros/cmd/takeoff")
         while not self.srv_takeoff.wait_for_service(timeout_sec=1.0):
             self.get_logger().warning('WARN: Waiting for the takeoff service to become available!')
         self.msg_takeoff = CommandTOL.Request(min_pitch=min_pitch, yaw=yaw, latitude=latitude, longitude=longitude, altitude=altitude)
         self.status = self.srv_takeoff.call_async(self.msg_takeoff)
         self.get_logger().debug(f'response:\n {self.status}')
-        # while self.getPos("altitude")
 
 
     def checkWaypointReached():
@@ -65,14 +65,10 @@ class ArdupilotVehicle():
 
 
     # getters
-    def getPos(self, direction: str): # altitude, longitude, latitude, yaw
-        pass
-        """if(direction == "altitude"):
-            pass
-        elif(direction == "latitude"):
-            pass """
+    def getPos(self, data: Node):
+        return Node
 
-    def getArmedState():
+    def getArmedState(self):
         pass
 
     def getCurrentPosition():
