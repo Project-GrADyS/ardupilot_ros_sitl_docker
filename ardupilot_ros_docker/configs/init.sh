@@ -10,6 +10,12 @@ read_ini() {
     echo "$value"
 }
 
+# Função para criar vetor de subvetores
+create_subvectors() {
+    local nodes="$1"  # Recebe a string de entrada como argumento
+    echo "$nodes" | awk '{ for (i=1; i<=NF; i+=2) printf "\"%s %s\" ", $i, $(i+1) }'
+}
+
 # Lendo e usando os valores do arquivo INI
 PACKAGES_TO_CREATE=$(read_ini "Configs" "PACKAGES_TO_CREATE")
 PACKAGES_TO_BUILD=$(read_ini "Configs" "PACKAGES_TO_BUILD")
@@ -17,6 +23,9 @@ NODES_FOR_RUN=$(read_ini "Configs" "NODES_FOR_RUN")
 COMPILE_STATE=$(read_ini "Configs" "COMPILE_STATE")
 CREATE_PACKAGE_STATE=$(read_ini "Configs" "CREATE_PACKAGE_STATE")
 COM_ARCH=$(read_ini "Configs" "COM_ARCH")
+
+nodes_run_array=$(create_subvectors "$NODES_FOR_RUN")
+eval "nodes_run_array=($nodes_run_array)"
 
 source /opt/ros/$ROS_DISTRO/setup.bash
 mkdir -p /ros2_ws/src
@@ -92,10 +101,18 @@ fi
 if [ $COM_ARCH -eq 2 ]; then
     echo -e "${GREEN_BOLD}INITIALIZING MODE:\
     ${RED}MAVROS"
-    ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
+    ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760 &
 fi
 
+# Esperando um pouco para garantir que o MAVROS seja iniciado completamente antes de iniciar os nós ROS 2
+sleep 8
+
 #aqui devera ter um laco "for" que ativara os conjuntos de nodes que irao rodar em ordem
-#for node in $NODES_FOR_RUN; do
-#    ros2 run $node
-#done
+source /opt/ros/humble/setup.bash && source /ros2_ws/install/setup.bash
+for package_node in "${nodes_run_array[@]}"; do
+    echo -e "${RED}RUNNING ${GREEN_BOLD}$package_node"
+    ros2 run $package_node
+done
+
+# Esperando todos os nós serem executados antes de terminar o script
+wait
