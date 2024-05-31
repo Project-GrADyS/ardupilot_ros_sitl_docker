@@ -77,9 +77,6 @@ class ArdupilotVehicle():
     def getFlightMode(self):
         pass
 
-    
-
-
     def waitConnect(self):
         self.get_logger().info('Waiting for FCU connect')
 
