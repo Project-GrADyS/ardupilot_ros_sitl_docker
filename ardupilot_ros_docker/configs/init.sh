@@ -101,8 +101,10 @@ fi
 if [ $COM_ARCH -eq 2 ]; then
     echo -e "${GREEN_BOLD}INITIALIZING MODE:\
     ${RED}MAVROS"
-    ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760 &
-fi
+    ros2 launch mavros apm.launch fcu_url:=udp://0.0.0.0:14540@14540 tgt_system:=1 &
+fi 
+#fcu_url:=udp://sitl_1:14551@14551 tgt_system:=1
+#fcu_url:=tcp://sitl_1:5760 tgt_system:=1
 
 # Esperando um pouco para garantir que o MAVROS seja iniciado completamente antes de iniciar os nós ROS 2
 sleep 8
