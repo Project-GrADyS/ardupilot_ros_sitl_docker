@@ -13,10 +13,23 @@ services:
     container_name: sitl_1
     platform: linux/amd64
     privileged: true
-    entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 --custom-location=39.9656,-75.1810,276,180 -w --frame + --no-rebuild --enable-dds --no-mavproxy --speedup 2
+    entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,180 --out=udp:ros_control:14540
+    #--out=udp:ros_control:14540
+    #--out=udp:sitl_1:14551 --out=udp:127.0.0.1:14553
+    #--custom-location=39.9656,-75.1810,276,180
+    # --no-mavproxy
+    # --speedup
     tty: true
     ports:
-      - 5760:5760
+      - 5760:5760 #- 14553:14553/udp
+      - 14540:14540/udp
+    expose:
+      - "14540/udp" # 5760:5760
+    environment:
+      - DISPLAY=$DISPLAY
+      - QT_X11_NO_MITSHM=1 
+    volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
     networks:
       - ros_sitl_net
     env_file:
@@ -24,18 +37,23 @@ services:
 
 
   #mavproxy:
-    #image: ardupilot
-    #container_name: MAVProxy
-    #entrypoint: ["python3",  "/home/dockeruser/.local/lib/python3.10/site-packages/MAVProxy/mavproxy.py", "--master=tcp:sitl_1:5760", "--out udp:sitl_1:14550"]
-    #stdin_open: true
-    #tty: true
-    #ports:
-    #  - 8080:8080
-    #networks:
-    #  - ros_sitl_net
+  #  image: ardupilot
+  #  container_name: MAVProxy
+  #  entrypoint: ["python3",  "/home/dockeruser/.local/lib/python3.10/site-packages/MAVProxy/mavproxy.py", "--master=tcp:sitl_1:5760"]
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #    - 8080:8080
+  #  environment:
+  #    - DISPLAY=${DISPLAY}
+  #  volumes:
+  #    - /tmp/.X11-unix:/tmp/.X11-unix:rw
+  #  networks:
+  #    - ros_sitl_net    networks:
+
 
   # for process monitoring
-  #create a volume to store the packages
+  # create a volume to store the packages
   # definir o deploy:
   # packages a serem compilados
   # scripts a serem considerados

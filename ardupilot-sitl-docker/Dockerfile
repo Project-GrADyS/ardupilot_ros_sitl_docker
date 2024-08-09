@@ -44,8 +44,8 @@ RUN ./waf distclean
 RUN ./waf configure --board sitl
 RUN ./waf copter
 RUN ./waf rover 
-RUN ./waf plane
-RUN ./waf sub
+#RUN ./waf plane
+#RUN ./waf sub
 
 RUN export PATH=$PATH:/ardupilot/Tools/autotest
 
