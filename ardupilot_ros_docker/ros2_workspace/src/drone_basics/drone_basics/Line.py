@@ -27,8 +27,8 @@ class Line(Copter):
         self.mission.initialize_local_frame()
         
         # Create timers for callbacks
-        self.check_alt_callback = self.create_timer(0.02, self.check_alt)
-        self.state_callback = self.create_timer(0.02, self.arm_vehicle)
+        self.check_alt_callback = self.create_timer(0.15, self.check_alt)
+        self.state_callback = self.create_timer(0.15, self.arm_vehicle)
 
     def arm_vehicle(self):
         """
@@ -55,7 +55,7 @@ class Line(Copter):
         if alt >= 0.95 * ALT and not self.timerIsOn:
             self.timerIsOn = True
             self.get_logger().info('RODOU 0')
-            self.mission_timer = self.create_timer(0.01, self.run_mission)
+            self.mission_timer = self.create_timer(0.15, self.run_mission)
 
     def activate_land(self):
         """
@@ -82,9 +82,9 @@ def main(args=None):
     rclpy.init(args=args)
 
     drone = Line('line_node', 25)
-    drone.getState().setMavrosStreamRate(5)
+    drone.getState().setMavrosStreamRate(6)
     drone.getState().setMode("GUIDED")
-    rate = drone.create_rate(5)
+    rate = drone.create_rate(6)
     try:
         while rclpy.ok():
             drone.get_logger().warning('Beginning client, shut down with CTRL-C')
