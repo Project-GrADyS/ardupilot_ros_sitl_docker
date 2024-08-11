@@ -77,9 +77,10 @@ class Mission():
         self.__local_offset_pose_g.y += self.__vehicle.getGlobalPosition().getLocal().getPosePosition().getY()
         self.__local_offset_pose_g.z += self.__vehicle.getGlobalPosition().getLocal().getPosePosition().getZ()
         self.__init_control_index += 1
+        self.__vehicle.get_logger().info(f'RODOU = {self.__init_control_index}')
 
-
-        if(self.__init_control_index >=30):
+        
+        if(self.__init_control_index >=29):
             self.__local_offset_pose_g.x /= 30.0
             self.__local_offset_pose_g.y /= 30.0
             self.__local_offset_pose_g.z /= 30.0
@@ -89,7 +90,7 @@ class Mission():
                 CGREEN2 + "The X-Axis is facing: {}".format(self.__local_offset_g) + CEND)
             self.__vehicle.destroy_timer(self.__init_loop)
 
-    def enu_2_local(self):
+    def enu_2_local(self) -> Point:
         x, y, z = (
             self.__vehicle.getGlobalPosition().getLocal().getPosePosition().getX(),
             self.__vehicle.getGlobalPosition().getLocal().getPosePosition().getY(),
