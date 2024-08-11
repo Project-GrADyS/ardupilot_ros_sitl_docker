@@ -15,7 +15,7 @@ PERIOD = 6
 FREQUENCY = round(1/PERIOD, 2)
 #range fence limits
 DISTANCE_LOWER_LIMIT = 0
-DISTANCE_UPPER_LIMIT = 85
+DISTANCE_UPPER_LIMIT = 100
 
 class RandomFence(Copter):
     """
@@ -68,7 +68,7 @@ class RandomFence(Copter):
         "Calcula a direção e sentido do destino em relação a origem com referência ao eixo y valores de sinais compatíveis aos inseridos na funcao de set_destination"
         current_pos = self.getGlobalPosition().getLocal().getPosePosition()
 
-        origin = (-current_pos.getX(), -current_pos.getY())
+        origin = (current_pos.getX(), current_pos.getY())
         destination = (self.random_value[0], self.random_value[1])
 
         delta_x = destination[0] - origin[0]
@@ -90,7 +90,8 @@ class RandomFence(Copter):
                                      y=self.random_value[1], 
                                      z=ALT, 
                                      psi=self.destination_psi)
-        if self.mission.check_waypoint_reached(head_tol=0.03, pos_tol=0.45):
+        print(f"VALORES_ALEATORIOS: X={self.random_value[0]} Y={self.random_value[1]}")
+        if self.mission.check_waypoint_reached(pos_tol=0.6):
             self.random_value = (random.randint(DISTANCE_LOWER_LIMIT, DISTANCE_UPPER_LIMIT), 
                                  random.randint(DISTANCE_LOWER_LIMIT, DISTANCE_UPPER_LIMIT))
             self.calc_direction()
