@@ -23,6 +23,7 @@ setup(
 	    'arm_client = drone_basics.ArmTest:main',
         'takeoff_land_node = drone_basics.TakeoffLand:main',
         'line_node = drone_basics.Line:main',
+        'random_fence_node = drone_basics.RandomFence:main',
         ],
     },
 )
