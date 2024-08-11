@@ -7,7 +7,7 @@ from rclpy.node import Node
 from ArdupilotModules.Copter import Copter
 
 # Constants
-ALT = 8.0
+ALT = 4.0
 
 class Line(Copter):
     """
@@ -21,9 +21,8 @@ class Line(Copter):
         self.waypoint_index = 0
         self.goals = [
             [0, 40, ALT, 0], [40, 40, ALT, -90], [40, 0, ALT, -180],
-            [0, 0, ALT, 90], [0, 0, ALT, 0]
+            [0, 0, ALT, 90], [0, 0, ALT, 0] 
         ]
-
         self.mission.initialize_local_frame()
         
         # Create timers for callbacks
@@ -48,10 +47,18 @@ class Line(Copter):
         """
         alt = self.getLocalPosition().getPose().getPosePosition().getZ()
         pos = self.getGlobalPosition().getLocal().getPosePosition()
-        self.get_logger().info(f'POSITION: \n \
+        self.get_logger().info(f'GLOCALPOSITION: \n \
                                X: {pos.getX()}\n \
                                Y: {pos.getY()}\n \
                                Z: {pos.getZ()}\n')
+        self.get_logger().info(f'LLOCALPOSITION: \n \
+                               X: {self.getLocalPosition().getPose().getPosePosition().getX()}\n \
+                               Y: {self.getLocalPosition().getPose().getPosePosition().getY()}\n \
+                               Z: {self.getLocalPosition().getPose().getPosePosition().getZ()}\n')
+        self.get_logger().info(f'enu_2_pos: \n \
+                               X: {self.mission.enu_2_local().x}\n \
+                               Y: {self.mission.enu_2_local().y}\n \
+                               Z: {self.mission.enu_2_local().z}\n')
         if alt >= 0.95 * ALT and not self.timerIsOn:
             self.timerIsOn = True
             self.get_logger().info('RODOU 0')
