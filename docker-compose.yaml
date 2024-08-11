@@ -13,7 +13,7 @@ services:
     container_name: sitl_1
     platform: linux/amd64
     privileged: true
-    entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,180 --out=udp:ros_control:14540
+    entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,0 --out=udp:ros_control:14540
     #--out=udp:ros_control:14540
     #--out=udp:sitl_1:14551 --out=udp:127.0.0.1:14553
     #--custom-location=39.9656,-75.1810,276,180
