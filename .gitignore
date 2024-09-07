@@ -4,3 +4,6 @@ ardupilot_ros_docker/ros2_workspace/log/*
 ardupilot_ros_docker/ros2_workspace/src/drone_basics/drone_basics/__pycache__/*
 .vscode
 ardupilot_ros_docker/ros2_workspace/src/drone_basics/drone_basics/ArdupilotModules/__pycache__/*
+ardupilot_ros_docker/ros2_workspace/src/micro_ros_setup/
+ardupilot_ros_docker/ros2_workspace/src/ros2.repos
+ardupilot_ros_docker/ros2_workspace/src/uros/*
