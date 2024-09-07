@@ -86,17 +86,20 @@ if [ $COM_ARCH -eq 1 ]; then
         ros2 run micro_ros_setup build_agent.sh
     fi
 
-source /ros2_ws/install/local_setup.bash
-cd /
+    source /ros2_ws/install/local_setup.bash
+    cd /
 #in development
-git clone --depth=1 https://github.com/ArduPilot/ardupilot.git
-cd /ardupilot
-git sparse-checkout set --no-cone libraries/AP_DDS/
-cd /ardupilot/libraries/AP_DDS/
+    if [ ! -d "ardupilot" ]; then
+        git clone --depth=1 https://github.com/ArduPilot/ardupilot.git
+        cd /ardupilot || exit
+        git sparse-checkout set --no-cone libraries/AP_DDS/
+        cd /ardupilot/libraries/AP_DDS/ || exit
+    fi
 #export PATH=$PATH:/dds-gen/scripts
-ros2 run micro_ros_agent micro_ros_agent udp4 -p 5760 -r dds_xrce_profile.xml
-fi
+    ros2 run micro_ros_agent micro_ros_agent udp4 --port 144540 --verbose 6
 
+fi
+#https://discuss.ardupilot.org/t/testing-ppp-and-dds-on-a-desktop-or-laptop/120187
 #aqui devera rodar o mavros(unstable)
 if [ $COM_ARCH -eq 2 ]; then
     echo -e "${GREEN_BOLD}INITIALIZING MODE:\
