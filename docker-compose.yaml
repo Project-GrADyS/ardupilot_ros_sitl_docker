@@ -1,5 +1,3 @@
-version: '3.8'
-
 networks:
   ros_sitl_net:
     driver: bridge
@@ -13,28 +11,23 @@ services:
     container_name: sitl_1
     platform: linux/amd64
     privileged: true
-    entrypoint: /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,0 --out=udp:ros_control:14540
-    #--out=udp:ros_control:14540
-    #--out=udp:sitl_1:14551 --out=udp:127.0.0.1:14553
-    #--custom-location=39.9656,-75.1810,276,180
-    # --no-mavproxy
-    # --speedup
+    entrypoint: [ "/bin/sh", "-c", "if [ \"$SIM_MODE\" = \"true\" ]; then /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,0 --out=udp:ros_control:14540; else echo 'Simulation mode is off'; fi" ]
     tty: true
     ports:
-      - 5760:5760 #- 14553:14553/udp
+      - 5760:5760
       - 14540:14540/udp
     expose:
-      - "14540/udp" # 5760:5760
+      - "14540/udp"
     environment:
       - DISPLAY=$DISPLAY
-      - QT_X11_NO_MITSHM=1 
+      - QT_X11_NO_MITSHM=1
+      - SIM_MODE=${SIM_MODE}
     volumes:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     networks:
       - ros_sitl_net
     env_file:
       - sitl-protocol.env
-
 
   #mavproxy:
   #  image: ardupilot
@@ -66,13 +59,13 @@ services:
       context: .
       dockerfile: ./ardupilot_ros_docker/Dockerfile_dev-ros
     container_name: ros_control
-    entrypoint: ["/bin/bash", "-c", "/ros2_config_app/init.sh"]
+    entrypoint: [ "/bin/bash", "-c", "/ros2_config_app/init.sh" ]
     privileged: true
     volumes:
       - type: bind
         source: ./ardupilot_ros_docker/ros2_workspace
         target: /ros2_ws
-        
+
       - type: bind
         source: ./ardupilot_ros_docker/configs
         target: /ros2_config_app
