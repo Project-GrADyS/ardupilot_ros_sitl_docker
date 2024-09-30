@@ -11,7 +11,7 @@ services:
     container_name: sitl_1
     platform: linux/amd64
     privileged: true
-    entrypoint: [ "/bin/sh", "-c", "if [ \"$SIM_MODE\" = \"true\" ]; then /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,0 --out=udp:ros_control:14540; else echo 'Simulation mode is off'; fi" ]
+    entrypoint: [ "/bin/sh", "-c", "if [ \"$SIM_MODE\" -eq 1 ]; then /ardupilot/Tools/autotest/sim_vehicle.py --vehicle ArduCopter -I0 -w --frame=quad --no-rebuild --enable-dds --speedup 2 --console --map --custom-location=-15.8415,-47.9263,276,0 --out=udp:ros_control:14540; else echo 'Simulation mode is off'; fi" ]
     tty: true
     ports:
       - 5760:5760
@@ -58,9 +58,20 @@ services:
     build:
       context: .
       dockerfile: ./ardupilot_ros_docker/Dockerfile_dev-ros
+    user: 0:0
     container_name: ros_control
     entrypoint: [ "/bin/bash", "-c", "/ros2_config_app/init.sh" ]
     privileged: true
+    environment:
+      - COMPILE_STATE=${COMPILE_STATE}
+      - CREATE_PACKAGE_STATE=${CREATE_PACKAGE_STATE}
+      - PACKAGES_TO_CREATE=${PACKAGES_TO_CREATE}
+      - PACKAGES_TO_BUILD=${PACKAGES_TO_BUILD}
+      - NODES_FOR_RUN=${NODES_FOR_RUN}
+      - COM_ARCH=${COM_ARCH}
+      - FCU_URL=${FCU_URL}
+      - SIM_MODE=${SIM_MODE}
+      - TGT_SYSTEM=${TGT_SYSTEM}
     volumes:
       - type: bind
         source: ./ardupilot_ros_docker/ros2_workspace
@@ -70,5 +81,7 @@ services:
         source: ./ardupilot_ros_docker/configs
         target: /ros2_config_app
         read_only: true
+    devices:
+      - /dev/ttyS0:/dev/ttyS0
     networks:
       - ros_sitl_net
