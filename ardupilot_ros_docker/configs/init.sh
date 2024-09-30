@@ -2,28 +2,11 @@
 
 source constants.sh
 
-# Função para ler valores do arquivo INI
-read_ini() {
-    local section=$1
-    local key=$2
-    local value=$(awk -F '=' '/\['$section'\]/{f=1} f==1&&$1~/'$key'/{print $2;exit}' "$CONFIG_FILE")
-    echo "$value"
-}
-
 # Função para criar vetor de subvetores
 create_subvectors() {
     local nodes="$1" # Recebe a string de entrada como argumento
     echo "$nodes" | awk '{ for (i=1; i<=NF; i+=2) printf "\"%s %s\" ", $i, $(i+1) }'
 }
-
-# Lendo e usando os valores do arquivo INI
-PACKAGES_TO_CREATE=$(read_ini "Configs" "PACKAGES_TO_CREATE")
-PACKAGES_TO_BUILD=$(read_ini "Configs" "PACKAGES_TO_BUILD")
-NODES_FOR_RUN=$(read_ini "Configs" "NODES_FOR_RUN")
-COMPILE_STATE=$(read_ini "Configs" "COMPILE_STATE")
-CREATE_PACKAGE_STATE=$(read_ini "Configs" "CREATE_PACKAGE_STATE")
-COM_ARCH=$(read_ini "Configs" "COM_ARCH")
-FCU_URL=$(read_ini "Configs" "FCU_URL")
 
 nodes_run_array=$(create_subvectors "$NODES_FOR_RUN")
 eval "nodes_run_array=($nodes_run_array)"
@@ -105,7 +88,13 @@ fi
 if [ "$COM_ARCH" -eq 2 ]; then
     echo -e "${GREEN_BOLD}INITIALIZING MODE:\
     ${RED}MAVROS"
-    ros2 launch mavros apm.launch fcu_url:="$FCU_URL" tgt_system:=1 &
+    if [ "$SIM_MODE" -eq 1 ]; then
+        echo -e "${RED}SIMULATOR"
+        ros2 launch mavros apm.launch fcu_url:=udp://0.0.0.0:14540@14540 tgt_system:=1 &
+    else
+        echo -e "${RED}SERIAL"
+        ros2 launch mavros apm.launch fcu_url:=${FCU_URL} tgt_system:=${TGT_SYSTEM} &
+    fi
 fi
 #fcu_url:=udp://sitl_1:14551@14551 tgt_system:=1
 #fcu_url:=tcp://sitl_1:5760 tgt_system:=1
