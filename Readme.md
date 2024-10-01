@@ -90,7 +90,7 @@ When configuring serial devices for communication with the flight controller (FC
 
 ```yaml
 services:
-  ros2:
+  ros-control:
     devices:
       - /dev/ttyS0:/dev/ttyS0
 ```
@@ -100,7 +100,7 @@ In this case, `/dev/ttyS0` on the host is mapped to `/dev/ttyS0` inside the cont
 Additionally, don't forget to update the FCU_URL in the .env file of your Docker Compose setup to reflect the correct serial device. For example:
 
 ```env
-FCU_URL=/dev/ttyS0
+FCU_URL=/dev/ttyS0:115200
 ```
 
 This ensures that your ROS application communicates with the right serial port for the FCU.
