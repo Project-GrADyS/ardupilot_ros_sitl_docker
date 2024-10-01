@@ -1,10 +1,11 @@
 # Ardupilot ROS-SITL Docker
 
-
 ## 📝 Overview
+
 This guide provides instructions for setting up a complete ROS environment for interacting with Ardupilot using both MAVROS (MAVLink) and DDS (Data Distribution Service). The goal is to enable efficient communication and control of autonomous vehicles using ROS, leveraging the high-rate data transfer capabilities of DDS compared to MAVLink.
 
 ## 📋 Table of Contents
+
 1. [Overview](#-overview)
 2. [Technologies](#️-technologies)
 3. [Repositories](#-repositories)
@@ -12,7 +13,6 @@ This guide provides instructions for setting up a complete ROS environment for i
 5. [Installation](#-installation)
 6. [Usage](#-usage)
    - [Running Docker Compose](#running-docker-compose)
-   - [Simulation and Vehicle Connection Modes](#simulation-and-vehicle-connection-modes)
    - [Running Manually](#running-manually)
      - [ROS Humble](#ros-humble)
        - [Build the Image](#build-the-image)
@@ -25,16 +25,17 @@ This guide provides instructions for setting up a complete ROS environment for i
    - [Configuring ROS Deployment](#configuring-ros-deployment)
    - [Enabling Graphical Interface](#enabling-graphical-interface)
 
-
-
 ## 🛠️ Technologies
+
 The setup is based on the following technologies:
+
 - **Docker**: Used to containerize and run the Ardupilot and ROS environment.
 - **ROS Humble**: For robotic system development.
 - **MAVROS2**: ROS package to communicate with MAVLink-compatible autopilots.
 - **DDS**: Data Distribution Service, providing faster communication than MAVLink.
 
 ## 📁 Repositories
+
 The setup is based on the following repositories:
 
 - SITL (Software in the Loop Simulation):
@@ -46,9 +47,10 @@ The setup is based on the following repositories:
 - AP_DDS (DDS integration with Ardupilot):
   - [AP_DDS](https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_DDS#installing-build-dependencies)
 
-
 ## 💡 Introduction
+
 ### Setting Up ROS, MAVROS, and DDS Environment for Ardupilot
+
 Configuring a functional ROS (Robot Operating System) environment to interact with Ardupilot can be quite challenging, especially when attempting to integrate MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems serve critical roles in autonomous vehicle control, but they use different communication protocols, leading to complexities when switching or combining their use.
 
 MAVROS relies on MAVLink, the well-established protocol for drone communication, widely adopted in the UAV industry. It is robust but operates at a slower rate of around 50 Hz. On the other hand, DDS, such as Eprosima XRCE-DDS, offers faster data transmission (above 200 Hz), which is particularly useful in scenarios that demand low-latency, high-frequency communication for autonomous vehicles. The challenge arises in configuring both MAVROS and DDS to work seamlessly within the same ROS environment, especially when transitioning between simulation modes and real-world vehicle deployment.
@@ -61,10 +63,10 @@ In this guide, we’ll walk through setting up this integrated environment, incl
 
 >MAVROS (MAVLink): For more traditional communication with Ardupilot via MAVLink, use MAVROS within ROS. More information can be found [here](https://github.com/mavlink/mavros)
 
-
 [Learn more about the performance comparison between MAVLink and DDS here.](https://cdck-file-uploads-global.s3.dualstack.us-west-2.amazonaws.com/business7/uploads/ros/original/3X/f/1/f10479eaf0434928929bf0637f52a468102f6a51.pdf)
 
 ## 🚀 Installation
+
 To get started with this environment, follow these steps:
 
 1. Make sure [Docker](https://docs.docker.com/engine/install/) is installed on your machine.
@@ -73,38 +75,37 @@ To get started with this environment, follow these steps:
 ## 🔧 Usage
 
 ### Running Docker Compose
+
 To start the entire environment automatically, use Docker Compose in the **ARDUPILOT_ROS_SITL_DOCKER** folder by running the following command:
 
 ```sh
 docker compose up
 ```
 
-#### Simulation and Vehicle Connection Modes
-You can configure whether to run the SITL (Software In The Loop) simulator or connect to a real vehicle via the serial bus by setting the SIM_MODE environment variable. Configure it as follows:
-- To run the simulator, set `SIM_MODE=true`.
-- To connect to a real vehicle, set `SIM_MODE=false`.
-
-> *example*: `SIM_MODE=true docker compose up`
-
 ### Running Manually
 
 If you prefer to execute each component manually, follow these steps:
 
 #### ROS Humble
-##### Build the Image:
+
+##### Build the Image
 
 To create the Docker image with ROS and MAVROS, use the provided Dockerfile:
+
 ```sh
 docker run -it --rm ardupilot_ros
 ```
 
-##### Running ROS:
+##### Running ROS
+
 To run the ROS Humble container with MAVROS, use the following command:
 
 ```sh
 docker run -it --rm ardupilot_ros
 ```
-##### Experimental Mode:
+
+##### Experimental Mode
+
 If you wish to run ROS in a custom Docker network and mount directories for development, use the following command. This will create a network called `ros_sitl` and map the source code to facilitate development.
 
 ```sh
@@ -113,13 +114,19 @@ docker run -it --rm --network ros_sitl --mount type=bind,source="$(pwd)"/PKG,tar
 ros2 launch mavros apm.launch fcu_url:=tcp://sitl_1:5760
 
 ```
+
 #### SITL and MAVProxy
-##### Build the Image:
+
+##### Build the Image
+
 Build the Docker image for SITL:
+
 ```sh
 docker build --tag ardupilot .
 ```
-##### Running SITL:
+
+##### Running SITL
+
 To run the SITL simulator and enable MAVLink communication, execute the following command:
 
 ```sh
@@ -127,6 +134,7 @@ docker run -it --rm -p 5760:5760 ardupilot
 ```
 
 To run SITL in a network with ROS:
+
 ```sh
 docker run -it --rm --name sitl_1 --network ros_sitl -p 5760:5760 ardupilot
 ```
@@ -134,12 +142,27 @@ docker run -it --rm --name sitl_1 --network ros_sitl -p 5760:5760 ardupilot
 ## ⚙️ Configuration
 
 ### Configuring ROS Deployment
-In the **ardupilot_ros_docker/configs/config.ini** directory, you'll find a config.ini file. This configuration file is crucial for setting up the ROS deployment, where you can define several options related to the ROS execution, such as simulation modes, communication ports, and vehicle-specific parameters.
+
+In the root folder of your project, you will find the **.env** file. This configuration file is crucial for configuring your ROS deployment, where you can set various options related to running ROS, such as simulation modes, communication ports, and vehicle-specific parameters.
+
+| **Option**            | **Definition**                                                    | **Usage**                                                                                                      | **Example**                                     |
+|---------------------- |------------------------------------------------------------------ |--------------------------------------------------------------------------------------------------------------- |------------------------------------------------ |
+| COMPILE_STATE         | determines whether there will be compilation                      | 0 -> OFF \| 1 -> ON                                                                                            | COMPILE_STATE=0                                 |
+| CREATE_PACKAGE_STATE  | determines whether packages will be created                       | 0 -> OFF \| 1 -> ON                                                                                            | CREATE_PACKAGE_STATE=0                          |
+| PACKAGES_TO_CREATE    | list of packages to be created                                    | "\<PKG1\> \<PKG2\> \<PKG3\>..."                                                                                | PACKAGES_TO_CREATE=drone_basics                 |
+| PACKAGES_TO_BUILD     | list of packages to be compiled                                   | "\<PKG1\> \<PK2\> \<PKG3\>..."                                                                                 | PACKAGES_TO_BUILD=drone_basics                  |
+| NODES_FOR_RUN         | list of nodes to run. (requires the package the node belongs to)  | "\<PKG1\> \<NODE1\> \<PKG2\> \<NODE2\>..."                                                                     | NODES_FOR_RUN="drone_basics random_fence_node"  |
+| COM_ARCH              | defines the communication driver                                  | 1 -> Micro XRCE-DDS \| 2 -> MAVROS                                                                             | COM_ARCH=2                                      |
+| SIM_MODE              | determines whether execution is simulation or serial              | 0 -> OFF \| 1 -> ON                                                                                            | SIM_MODE=1                                      |
+| FCU_URL               | serial device (requires SIM_MODE disabled)                        | `/dev/\<device\>:\<baudrate\>`<br> or<br> `udp://\<IP\>:\<PORT\>@\<PORT\>`<br> or<br> `tcp://\<IP\>:\<PORT\>`  | FCU_URL=/dev/ttyS0:115200                       |
+| TGT_SYSTEM            | Vehicle MAV_SYS_ID                                                | <int>                                                                                                          | TGT_SYSTEM=23                                   |
 
 ### Enabling Graphical Interface
+
 If you need to visualize the simulator's graphical interface, ensure you run the following command before starting the Docker containers:
 
 ```sh
 xhost +
 ```
+
 This will allow Docker to access the host's graphical interface, which is essential for visualizing the simulation environment.
