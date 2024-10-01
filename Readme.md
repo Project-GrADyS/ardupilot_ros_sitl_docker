@@ -13,6 +13,8 @@ This guide provides instructions for setting up a complete ROS environment for i
 5. [Installation](#-installation)
 6. [Usage](#-usage)
    - [Running Docker Compose](#running-docker-compose)
+        - [Mapping Serial Device in Docker Compose](#mapping-serial-device-in-docker-compose)
+        - [Serial Device Permissions](#serial-device-permissions)
    - [Running Manually](#running-manually)
      - [ROS Humble](#ros-humble)
        - [Build the Image](#build-the-image)
@@ -82,6 +84,45 @@ To start the entire environment automatically, use Docker Compose in the **ARDUP
 docker compose up
 ```
 
+#### Mapping Serial Device in Docker Compose
+
+When configuring serial devices for communication with the flight controller (FCU), it's important to map the correct serial device in your `docker-compose.yaml` file. For example:
+
+```yaml
+services:
+  ros2:
+    devices:
+      - /dev/ttyS0:/dev/ttyS0
+```
+
+In this case, `/dev/ttyS0` on the host is mapped to `/dev/ttyS0` inside the container. You should adjust this mapping according to the specific device you are using.
+
+Additionally, don't forget to update the FCU_URL in the .env file of your Docker Compose setup to reflect the correct serial device. For example:
+
+```env
+FCU_URL=/dev/ttyS0
+```
+
+This ensures that your ROS application communicates with the right serial port for the FCU.
+
+#### Serial Device Permissions
+
+When working with serial devices in Docker containers, it's crucial to ensure that the permissions are correctly set to avoid access issues.
+
+##### Folder Structure
+
+**Warning:**  
+Be cautious about the path you choose for storing data. It’s recommended **not to use `/home`** for data storage because user folders in `/home` tend to have restrictive permissions by default. This could lead to permission problems, creating unnecessary complexity. Instead, opt for directories outside `/home`, such as `/data`.
+
+##### Permissions
+
+To avoid permission issues, it's important to recursively set the correct ownership and permissions on the directories and files used in your Docker environment. Use the following commands to set the ownership and permissions:
+
+```bash
+sudo chown -R $USER:$USER /data/ardupilot_ros_sitl_docker
+sudo chmod -R a=,a+rX,u+w,g+w /data/ardupilot_ros_sitl_docker
+```
+
 ### Running Manually
 
 If you prefer to execute each component manually, follow these steps:
@@ -148,7 +189,7 @@ In the root folder of your project, you will find the **.env** file. This config
 | **Option**            | **Definition**                                                    | **Usage**                                                                                                      | **Example**                                     |
 |---------------------- |------------------------------------------------------------------ |--------------------------------------------------------------------------------------------------------------- |------------------------------------------------ |
 | COMPILE_STATE         | determines whether there will be compilation                      | 0 -> OFF \| 1 -> ON                                                                                            | COMPILE_STATE=0                                 |
-| CREATE_PACKAGE_STATE  | determines whether packages will be created                       | 0 -> OFF \| 1 -> ON                                                                                            | CREATE_PACKAGE_STATE=0                          |
+| CREATE_PACKAGE_STATE  | determines whether packages will be created                       | 0 -> OFF \| 1 -> ON                   S                                                                         | CREATE_PACKAGE_STATE=0                          |
 | PACKAGES_TO_CREATE    | list of packages to be created                                    | "\<PKG1\> \<PKG2\> \<PKG3\>..."                                                                                | PACKAGES_TO_CREATE=drone_basics                 |
 | PACKAGES_TO_BUILD     | list of packages to be compiled                                   | "\<PKG1\> \<PK2\> \<PKG3\>..."                                                                                 | PACKAGES_TO_BUILD=drone_basics                  |
 | NODES_FOR_RUN         | list of nodes to run. (requires the package the node belongs to)  | "\<PKG1\> \<NODE1\> \<PKG2\> \<NODE2\>..."                                                                     | NODES_FOR_RUN="drone_basics random_fence_node"  |
