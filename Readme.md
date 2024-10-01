@@ -111,7 +111,7 @@ When working with serial devices in Docker containers, it's crucial to ensure th
 
 ##### Folder Structure
 
-**Warning:**  
+>**Warning:**  
 Be cautious about the path you choose for storing data. It’s recommended **not to use `/home`** for data storage because user folders in `/home` tend to have restrictive permissions by default. This could lead to permission problems, creating unnecessary complexity. Instead, opt for directories outside `/home`, such as `/data`.
 
 ##### Permissions
