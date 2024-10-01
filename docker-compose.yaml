@@ -26,8 +26,6 @@ services:
       - /tmp/.X11-unix:/tmp/.X11-unix:rw
     networks:
       - ros_sitl_net
-    env_file:
-      - sitl-protocol.env
 
   #mavproxy:
   #  image: ardupilot
