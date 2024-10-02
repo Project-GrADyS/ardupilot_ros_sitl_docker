@@ -10,12 +10,12 @@ import random
 import math
 
 # Constants
-ALT = 5.0
+ALT = 15.0
 PERIOD = 6
 FREQUENCY = round(1/PERIOD, 2)
 #range fence limits
 DISTANCE_LOWER_LIMIT = 0
-DISTANCE_UPPER_LIMIT = 100
+DISTANCE_UPPER_LIMIT = 20
 
 class RandomWaypoint(Copter):
     """
