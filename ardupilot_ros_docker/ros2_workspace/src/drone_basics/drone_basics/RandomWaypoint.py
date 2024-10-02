@@ -17,7 +17,7 @@ FREQUENCY = round(1/PERIOD, 2)
 DISTANCE_LOWER_LIMIT = 0
 DISTANCE_UPPER_LIMIT = 100
 
-class RandomFence(Copter):
+class RandomWaypoint(Copter):
     """
     Line class inherits from Copter to implement a mission sequence for a drone.
     """
@@ -100,7 +100,7 @@ class RandomFence(Copter):
 def main(args=None):
     rclpy.init(args=args)
 
-    drone = RandomFence('random_fence_node', 25)
+    drone = RandomWaypoint('random_waypoint_node', 25)
     drone.getState().setMavrosStreamRate(PERIOD)
     drone.getState().setMode("GUIDED")
     rate = drone.create_rate(PERIOD)
