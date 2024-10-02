@@ -51,7 +51,7 @@ def main(args=None):
     rclpy.init(args=args)
 
     drone = TakeoffLand('takeoff_land_node', 25)
-    drone.getState().setMavrosStreamRate()
+    drone.getState().setMavrosStreamRate(PERIOD)
     drone.getState().setMode("GUIDED")
     rate = drone.create_rate(PERIOD)
 
