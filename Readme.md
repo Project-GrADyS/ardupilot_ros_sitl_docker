@@ -121,6 +121,7 @@ To avoid permission issues, it's important to recursively set the correct owners
 ```bash
 sudo chown -R $USER:$USER /data/ardupilot_ros_sitl_docker
 sudo chmod -R a=,a+rX,u+w,g+w /data/ardupilot_ros_sitl_docker
+sudo chmod +x /data/ardupilot_ros_sitl_docker/ardupilot_ros_docker/configs/init.sh
 ```
 
 ### Running Manually
