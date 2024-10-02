@@ -65,7 +65,9 @@ class RandomWaypoint(Copter):
             self.mission_timer = self.create_timer(FREQUENCY, self.run_mission)
 
     def calc_direction(self) -> float:
-        "Calcula a direção e sentido do destino em relação a origem com referência ao eixo y valores de sinais compatíveis aos inseridos na funcao de set_destination"
+        """
+        Calculates the direction of the destination in relation to the origin with reference to the y-axis signal values ​​compatible with those entered in the set_destination function
+        """
         current_pos = self.getGlobalPosition().getLocal().getPosePosition()
 
         origin = (current_pos.getX(), current_pos.getY())
@@ -75,10 +77,10 @@ class RandomWaypoint(Copter):
         delta_x = -delta_x
         delta_y = destination[1] - origin[1]
         
-        # Calcula o ângulo em radianos
+        # Calculates the angle in radians
         theta_rad = math.atan2(delta_x, delta_y)
 
-        # Converte o ângulo para graus e ajusta para a referência ao eixo y
+        # Converts the angle to degrees and snaps to the y-axis reference
         theta_deg = math.degrees(theta_rad)
         self.destination_psi = theta_deg
 

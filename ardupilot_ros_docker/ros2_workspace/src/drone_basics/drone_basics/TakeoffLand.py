@@ -32,7 +32,7 @@ class TakeoffLand(Copter):
         #self.get_logger().info(f'alt data: {alt}')
         if alt >= 0.95 * ALT and not self.timerIsOn:
             self.timerIsOn = True
-            self.land_timer = self.create_timer(8.0, self.activate_land)  # Configura o temporizador para chamar a função que ativa o modo LAND após 8 segundos
+            self.land_timer = self.create_timer(8.0, self.activate_land)  # Sets the timer to call the function that activates LAND mode after 8 seconds
 
     def activate_land(self):
         self.get_logger().info('Activating LAND mode')
