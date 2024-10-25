@@ -53,7 +53,7 @@ The setup is based on the following repositories:
 
 ### Setting Up ROS, MAVROS, and DDS Environment for Ardupilot
 
-Configuring a functional ROS (Robot Operating System) environment to interact with ArduPilot presents a unique set of challenges, especially when integrating MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems are essential for the effective control of autonomous vehicConfiguring a functional ROS (Robot Operating System) environment to interact with ArduPilot presents a unique set of challenges, especially when integrating MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems are essential for the effective control of autonomous vehicles, but they operate on different communication protocols, which can complicate their combined use.
+Configuring a functional ROS (Robot Operating System) environment to interact with ArduPilot presents a unique set of challenges, especially when integrating MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems are essential for the effective control of autonomous vehicles, but they operate on different communication protocols, which can complicate their combined use.
 
 ArduPilot is a versatile autopilot system used across various types of vehicles, including drones, rovers, and boats. It provides a robust platform for developing autonomous applications. To maximize its capabilities, developers can leverage the extensive functionality of ROS alongside ArduPilot, allowing for more complex interactions and control strategies.
 
