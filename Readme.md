@@ -53,19 +53,45 @@ The setup is based on the following repositories:
 
 ### Setting Up ROS, MAVROS, and DDS Environment for Ardupilot
 
-Configuring a functional ROS (Robot Operating System) environment to interact with Ardupilot can be quite challenging, especially when attempting to integrate MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems serve critical roles in autonomous vehicle control, but they use different communication protocols, leading to complexities when switching or combining their use.
+Configuring a functional ROS (Robot Operating System) environment to interact with ArduPilot presents a unique set of challenges, especially when integrating MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems are essential for the effective control of autonomous vehicConfiguring a functional ROS (Robot Operating System) environment to interact with ArduPilot presents a unique set of challenges, especially when integrating MAVROS (MAVLink) and DDS (Data Distribution Service). Both of these systems are essential for the effective control of autonomous vehicles, but they operate on different communication protocols, which can complicate their combined use.
 
-MAVROS relies on MAVLink, the well-established protocol for drone communication, widely adopted in the UAV industry. It is robust but operates at a slower rate of around 50 Hz. On the other hand, DDS, such as Eprosima XRCE-DDS, offers faster data transmission (above 200 Hz), which is particularly useful in scenarios that demand low-latency, high-frequency communication for autonomous vehicles. The challenge arises in configuring both MAVROS and DDS to work seamlessly within the same ROS environment, especially when transitioning between simulation modes and real-world vehicle deployment.
+ArduPilot is a versatile autopilot system used across various types of vehicles, including drones, rovers, and boats. It provides a robust platform for developing autonomous applications. To maximize its capabilities, developers can leverage the extensive functionality of ROS alongside ArduPilot, allowing for more complex interactions and control strategies.
 
-Migrating between these two environments—MAVROS for traditional control and DDS for high-speed communication—requires careful management of parameters and connection settings, particularly when switching from the slower, more stable MAVLink to the faster, more dynamic DDS protocol. Misconfigurations can lead to communication mismatches, making the setup fragile if not properly handled.
+MAVROS utilizes MAVLink, a widely adopted communication protocol in the UAV industry. While MAVLink is reliable, it operates at a frequency of approximately 50 Hz, which may be insufficient for applications requiring rapid response times. In contrast, DDS, particularly with Eprosima XRCE-DDS, supports higher data transmission rates exceeding 200 Hz. This is particularly beneficial for applications demanding low-latency, high-frequency communication, such as real-time control in autonomous vehicles.
 
-In this guide, we’ll walk through setting up this integrated environment, including Docker container configuration, simulator execution, and Ardupilot integration. We'll also address the nuances of deploying MAVROS and DDS for both simulated and real-world applications.
+Integrating MAVROS and DDS within a single ROS environment necessitates meticulous management of configuration parameters and connection settings. Transitioning between MAVLink's more stable yet slower communication and DDS's dynamic capabilities can lead to communication mismatches if not handled properly. This fragility underscores the importance of a well-structured setup.
+
+To streamline the development process, containerization offers a practical solution. By utilizing Docker containers, developers can create isolated environments tailored for both MAVROS and DDS, simplifying the deployment of scripts designed to control ArduPilot vehicles. This approach allows for easy version management, testing, and collaboration, making it easier to switch between different configurations and environments.
+
+In this guide, we will detail the steps for setting up an integrated environment, including Docker container configuration, simulator execution, and ArduPilot integration. Additionally, we will explore the nuances of deploying MAVROS and DDS for both simulated and real-world applications, providing a comprehensive understanding of how to harness these technologies effectively.les, but they operate on different communication protocols, which can complicate their combined use.
+
+ArduPilot is a versatile autopilot system used across various types of vehicles, including drones, rovers, and boats. It provides a robust platform for developing autonomous applications. To maximize its capabilities, developers can leverage the extensive functionality of ROS alongside ArduPilot, allowing for more complex interactions and control strategies.
+
+MAVROS utilizes MAVLink, a widely adopted communication protocol in the UAV industry. While MAVLink is reliable, it operates at a frequency of approximately 50 Hz, which may be insufficient for applications requiring rapid response times. In contrast, DDS, particularly with Eprosima XRCE-DDS, supports higher data transmission rates exceeding 200 Hz. This is particularly beneficial for applications demanding low-latency, high-frequency communication, such as real-time control in autonomous vehicles.
+
+Integrating MAVROS and DDS within a single ROS environment necessitates meticulous management of configuration parameters and connection settings. Transitioning between MAVLink's more stable yet slower communication and DDS's dynamic capabilities can lead to communication mismatches if not handled properly. This fragility underscores the importance of a well-structured setup.
+
+To streamline the development process, containerization offers a practical solution. By utilizing Docker containers, developers can create isolated environments tailored for both MAVROS and DDS, simplifying the deployment of scripts designed to control ArduPilot vehicles. This approach allows for easy version management, testing, and collaboration, making it easier to switch between different configurations and environments.
+
+In this guide, we will detail the steps for setting up an integrated environment, including Docker container configuration, simulator execution, and ArduPilot integration. Additionally, we will explore the nuances of deploying MAVROS and DDS for both simulated and real-world applications, providing a comprehensive understanding of how to harness these technologies effectively.
 
 >DDS Middleware (Eprosima XRCE-DDS): For more efficient communication with lower latency, use XRCE-DDS. More information can be found [here](https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_DDS#installing-build-dependencies).
 
 >MAVROS (MAVLink): For more traditional communication with Ardupilot via MAVLink, use MAVROS within ROS. More information can be found [here](https://github.com/mavlink/mavros)
 
 [Learn more about the performance comparison between MAVLink and DDS here.](https://cdck-file-uploads-global.s3.dualstack.us-west-2.amazonaws.com/business7/uploads/ros/original/3X/f/1/f10479eaf0434928929bf0637f52a468102f6a51.pdf)
+
+
+## Archtecture
+![Archtecture Diagram](images/archtecture%20diagram.png)
+
+The architecture for implementing this solution consists of two Docker containers: one running a SITL (Software In The Loop) image and the other hosting a ROS 2 image. This setup is designed to facilitate the development and testing of autonomous vehicle code in a controlled environment.
+
+The SITL container simulates the flight dynamics of an ArduPilot-controlled vehicle, allowing developers to test their code without the need for physical hardware. Within this container, a standard network, referred to as ros_sitl_net, is established to facilitate communication between the SITL and the ROS 2 environment. This network configuration ensures that messages and data can be exchanged seamlessly during testing.
+
+The ROS 2 container serves as the primary development environment, where developers can create and run their autonomous vehicle applications. This setup not only allows for interaction with the SITL simulation but also supports connections to physical interfaces, enabling developers to test their code with real-world hardware when necessary.
+
+The entire process is orchestrated using Docker Compose, which simplifies the management of multi-container applications. With Docker Compose, developers can easily configure and launch both containers, ensuring they are connected and functioning correctly within the specified network. This streamlined workflow enhances the development process by enabling rapid iteration and testing, ultimately accelerating the deployment of autonomous vehicle solutions.
 
 ## 🚀 Installation
 
