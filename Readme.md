@@ -63,16 +63,6 @@ Integrating MAVROS and DDS within a single ROS environment necessitates meticulo
 
 To streamline the development process, containerization offers a practical solution. By utilizing Docker containers, developers can create isolated environments tailored for both MAVROS and DDS, simplifying the deployment of scripts designed to control ArduPilot vehicles. This approach allows for easy version management, testing, and collaboration, making it easier to switch between different configurations and environments.
 
-In this guide, we will detail the steps for setting up an integrated environment, including Docker container configuration, simulator execution, and ArduPilot integration. Additionally, we will explore the nuances of deploying MAVROS and DDS for both simulated and real-world applications, providing a comprehensive understanding of how to harness these technologies effectively.les, but they operate on different communication protocols, which can complicate their combined use.
-
-ArduPilot is a versatile autopilot system used across various types of vehicles, including drones, rovers, and boats. It provides a robust platform for developing autonomous applications. To maximize its capabilities, developers can leverage the extensive functionality of ROS alongside ArduPilot, allowing for more complex interactions and control strategies.
-
-MAVROS utilizes MAVLink, a widely adopted communication protocol in the UAV industry. While MAVLink is reliable, it operates at a frequency of approximately 50 Hz, which may be insufficient for applications requiring rapid response times. In contrast, DDS, particularly with Eprosima XRCE-DDS, supports higher data transmission rates exceeding 200 Hz. This is particularly beneficial for applications demanding low-latency, high-frequency communication, such as real-time control in autonomous vehicles.
-
-Integrating MAVROS and DDS within a single ROS environment necessitates meticulous management of configuration parameters and connection settings. Transitioning between MAVLink's more stable yet slower communication and DDS's dynamic capabilities can lead to communication mismatches if not handled properly. This fragility underscores the importance of a well-structured setup.
-
-To streamline the development process, containerization offers a practical solution. By utilizing Docker containers, developers can create isolated environments tailored for both MAVROS and DDS, simplifying the deployment of scripts designed to control ArduPilot vehicles. This approach allows for easy version management, testing, and collaboration, making it easier to switch between different configurations and environments.
-
 In this guide, we will detail the steps for setting up an integrated environment, including Docker container configuration, simulator execution, and ArduPilot integration. Additionally, we will explore the nuances of deploying MAVROS and DDS for both simulated and real-world applications, providing a comprehensive understanding of how to harness these technologies effectively.
 
 >DDS Middleware (Eprosima XRCE-DDS): For more efficient communication with lower latency, use XRCE-DDS. More information can be found [here](https://github.com/ArduPilot/ardupilot/tree/master/libraries/AP_DDS#installing-build-dependencies).
