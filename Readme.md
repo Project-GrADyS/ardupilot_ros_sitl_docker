@@ -90,6 +90,36 @@ To get started with this environment, follow these steps:
 1. Make sure [Docker](https://docs.docker.com/engine/install/) is installed on your machine.
 2. Clone [this repository](https://github.com/Project-GrADyS/ardupilot_ros_sitl_docker)
 
+## ⚙️ Configuration
+
+### Configuring ROS Deployment
+
+In the root folder of your project, you will find the **.env** file. This configuration file is crucial for configuring your ROS deployment, where you can set various options related to running ROS, such as simulation modes, communication ports, and vehicle-specific parameters.
+
+| **Option**            | **Definition**                                                    | **Usage**                                                                                        | **Example**                                     |
+|---------------------- |------------------------------------------------------------------ |------------------------------------------------------------------------------------------------- |------------------------------------------------ |
+| COMPILE_STATE         | determines whether there will be compilation                      | 0 -> OFF \| 1 -> ON                                                                              | COMPILE_STATE=0                                 |
+| CREATE_PACKAGE_STATE  | determines whether packages will be created                       | 0 -> OFF \| 1 -> ON                                                                              | CREATE_PACKAGE_STATE=0                          |
+| PACKAGES_TO_CREATE    | list of packages to be created                                    | "\<PKG1\> \<PKG2\> \<PKG3\>..."                                                                  | PACKAGES_TO_CREATE=drone_basics                 |
+| PACKAGES_TO_BUILD     | list of packages to be compiled                                   | "\<PKG1\> \<PK2\> \<PKG3\>..."                                                                   | PACKAGES_TO_BUILD=drone_basics                  |
+| NODES_FOR_RUN         | list of nodes to run. (requires the package the node belongs to)  | "\<PKG1\> \<NODE1\> \<PKG2\> \<NODE2\>..."                                                       | NODES_FOR_RUN="drone_basics random_fence_node"  |
+| COM_ARCH              | defines the communication driver                                  | 1 -> Micro XRCE-DDS \| 2 -> MAVROS                                                               | COM_ARCH=2                                      |
+| SIM_MODE              | determines whether execution is simulation or serial              | 0 -> OFF \| 1 -> ON                                                                              | SIM_MODE=1                                      |
+| FCU_URL               | serial device (requires SIM_MODE disabled)                        | `/dev/<device>:<baudrate>`<br> or<br> `udp://<IP>:<PORT>@<PORT>`<br> or<br> `tcp://<IP>:<PORT>`  | FCU_URL=/dev/ttyS0:115200                       |
+| TGT_SYSTEM            | Vehicle MAV_SYS_ID                                                | <int>                                                                                            | TGT_SYSTEM=23                                   |
+| VEHICLE            | Select Vehicle Type |'ArduCopter' or 'Rover'| TGT_SYSTEM=23                                   |
+
+### Enabling Graphical Interface
+
+If you need to visualize the simulator's graphical interface, ensure you run the following command before starting the Docker containers:
+
+```sh
+xhost +
+```
+
+This will allow Docker to access the host's graphical interface, which is essential for visualizing the simulation environment.
+
+
 ## 🔧 Usage
 
 ### Running Docker Compose
@@ -197,30 +227,3 @@ To run SITL in a network with ROS:
 docker run -it --rm --name sitl_1 --network ros_sitl -p 5760:5760 ardupilot
 ```
 
-## ⚙️ Configuration
-
-### Configuring ROS Deployment
-
-In the root folder of your project, you will find the **.env** file. This configuration file is crucial for configuring your ROS deployment, where you can set various options related to running ROS, such as simulation modes, communication ports, and vehicle-specific parameters.
-
-| **Option**            | **Definition**                                                    | **Usage**                                                                                        | **Example**                                     |
-|---------------------- |------------------------------------------------------------------ |------------------------------------------------------------------------------------------------- |------------------------------------------------ |
-| COMPILE_STATE         | determines whether there will be compilation                      | 0 -> OFF \| 1 -> ON                                                                              | COMPILE_STATE=0                                 |
-| CREATE_PACKAGE_STATE  | determines whether packages will be created                       | 0 -> OFF \| 1 -> ON                                                                              | CREATE_PACKAGE_STATE=0                          |
-| PACKAGES_TO_CREATE    | list of packages to be created                                    | "\<PKG1\> \<PKG2\> \<PKG3\>..."                                                                  | PACKAGES_TO_CREATE=drone_basics                 |
-| PACKAGES_TO_BUILD     | list of packages to be compiled                                   | "\<PKG1\> \<PK2\> \<PKG3\>..."                                                                   | PACKAGES_TO_BUILD=drone_basics                  |
-| NODES_FOR_RUN         | list of nodes to run. (requires the package the node belongs to)  | "\<PKG1\> \<NODE1\> \<PKG2\> \<NODE2\>..."                                                       | NODES_FOR_RUN="drone_basics random_fence_node"  |
-| COM_ARCH              | defines the communication driver                                  | 1 -> Micro XRCE-DDS \| 2 -> MAVROS                                                               | COM_ARCH=2                                      |
-| SIM_MODE              | determines whether execution is simulation or serial              | 0 -> OFF \| 1 -> ON                                                                              | SIM_MODE=1                                      |
-| FCU_URL               | serial device (requires SIM_MODE disabled)                        | `/dev/<device>:<baudrate>`<br> or<br> `udp://<IP>:<PORT>@<PORT>`<br> or<br> `tcp://<IP>:<PORT>`  | FCU_URL=/dev/ttyS0:115200                       |
-| TGT_SYSTEM            | Vehicle MAV_SYS_ID                                                | <int>                                                                                            | TGT_SYSTEM=23                                   |
-
-### Enabling Graphical Interface
-
-If you need to visualize the simulator's graphical interface, ensure you run the following command before starting the Docker containers:
-
-```sh
-xhost +
-```
-
-This will allow Docker to access the host's graphical interface, which is essential for visualizing the simulation environment.
