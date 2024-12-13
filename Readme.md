@@ -97,9 +97,9 @@ To get started with this environment, follow these steps:
 | File                | Description                                                                  |
 |---------------------|------------------------------------------------------------------------------|
 | docker-compose.yaml | Defines the ROS2, SITL containers and the communication network between them |
-| .env                | General Configs                                                              |
-| RandomWaypoint.py   | ROS2 node: Vehicle goes to random points on a demarcation                    |
-| Line.py             | ROS2 node: vehicle goes from point A to point B                              |
+| .env                | General deployment configuration                                                              |
+| RandomWaypoint.py   | ROS2 node example: Vehicle goes to random points on a demarcation                    |
+| Line.py             | ROS2 node example: vehicle goes from point A to point B                              |
 | setup.py            | config ROS2 nodes entrypoints                                                |
 
 ### Configuring ROS Deployment (.env)
