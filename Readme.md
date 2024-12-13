@@ -92,7 +92,17 @@ To get started with this environment, follow these steps:
 
 ## ⚙️ Configuration
 
-### Configuring ROS Deployment
+### Files
+
+| File                | Description                                                                  |
+|---------------------|------------------------------------------------------------------------------|
+| docker-compose.yaml | Defines the ROS2, SITL containers and the communication network between them |
+| .env                | General Configs                                                              |
+| RandomWaypoint.py   | ROS2 node: Vehicle goes to random points on a demarcation                    |
+| Line.py             | ROS2 node: vehicle goes from point A to point B                              |
+| setup.py            | config ROS2 nodes entrypoints                                                |
+
+### Configuring ROS Deployment (.env)
 
 In the root folder of your project, you will find the **.env** file. This configuration file is crucial for configuring your ROS deployment, where you can set various options related to running ROS, such as simulation modes, communication ports, and vehicle-specific parameters.
 
